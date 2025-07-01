@@ -2,14 +2,10 @@ name: build-test-deploy
 on: push
 jobs:
   build:
-    # permissions:
-    #   contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-        # with:
-        #    token: ${{ secrets.GITHUB_TOKEN }}
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -39,8 +35,8 @@ jobs:
   deploy:
     needs: test
     permissions:
-      # pages: write
-      id-token: write
+      pages: write
+      # id-token: write
     environment:
       name: production
       url: ${{ steps.deployment.outputs.page_url }}
