@@ -15,7 +15,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <h1>Congratulations!</h1>
+        <h1>It actually works!</h1>
         <p>
           You&apos;ve completed the essentials of automated application
           deployment with GitHub Actions! 🥳
