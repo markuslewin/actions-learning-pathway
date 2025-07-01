@@ -2,16 +2,28 @@ name: build-test-deploy
 on: push
 jobs:
   build:
+    # permissions:
+    #   contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+        # with:
+        #    token: ${{ secrets.GITHUB_TOKEN }}
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18.x'
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: next
       - run: npm install
       - run: npm run build
+      - name: Upload artifacts
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./out"
   test:
     needs: build
     runs-on: ubuntu-latest
@@ -27,7 +39,6 @@ jobs:
   deploy:
     needs: test
     permissions:
-      contents: write
       pages: write
       id-token: write
     environment:
@@ -35,24 +46,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-       - name: Checkout repo
-         uses: actions/checkout@v4
-         with:
-           token: ${{ secrets.GITHUB_TOKEN }}
-       - name: Use Node.js
-         uses: actions/setup-node@v4
-         with:
-           node-version: '18.x'
-       - name: Configure GitHub Pages
-         uses: actions/configure-pages@v5
-         with:
-           static_site_generator: next
-       - run: npm install
-       - run: npm run build
-       - name: Upload artifacts
-         uses: actions/upload-pages-artifact@v3
-         with:
-           path: "./out"
-       - name: deploy
+       - name: Deploy to GitHub Pages
          id: deployment
          uses: actions/deploy-pages@v4
