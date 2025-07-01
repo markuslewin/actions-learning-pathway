@@ -39,7 +39,7 @@ jobs:
   deploy:
     needs: test
     permissions:
-      pages: write
+      # pages: write
       id-token: write
     environment:
       name: production
